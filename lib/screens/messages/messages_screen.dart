@@ -46,23 +46,29 @@ class MessagesScreen extends StatelessWidget {
           ),
           title: Text(partner.name),
           subtitle: Text(lastMessage?.text ?? '아직 메시지가 없습니다.'),
-          trailing: room.unreadCount > 0
-              ? Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(12),
+          trailing: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 180),
+            transitionBuilder: (child, animation) => FadeTransition(opacity: animation, child: child),
+            child: room.unreadCount > 0
+                ? Container(
+                    key: ValueKey('unread-${room.id}-${room.unreadCount}'),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '${room.unreadCount}',
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                  )
+                : Text(
+                    lastMessage != null
+                        ? '${lastMessage.createdAt.hour.toString().padLeft(2, '0')}:${lastMessage.createdAt.minute.toString().padLeft(2, '0')}'
+                        : '',
+                    key: ValueKey('time-${room.id}-${lastMessage?.id ?? 'none'}'),
                   ),
-                  child: Text(
-                    '${room.unreadCount}',
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-                  ),
-                )
-              : Text(
-                  lastMessage != null
-                      ? '${lastMessage.createdAt.hour.toString().padLeft(2, '0')}:${lastMessage.createdAt.minute.toString().padLeft(2, '0')}'
-                      : '',
-                ),
+          ),
         );
       },
       separatorBuilder: (context, _) => const Divider(height: DaytwoSpacing.s16),

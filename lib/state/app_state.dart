@@ -8,6 +8,7 @@ import '../models/chat_room.dart';
 import '../models/match_item.dart';
 import '../models/message.dart';
 import '../models/user_profile.dart';
+import '../mock/mock_female_profiles.dart';
 
 class AppState extends ChangeNotifier {
   static const _testMaleEmail = 'test_male@daytwo.app';
@@ -98,8 +99,21 @@ class AppState extends ChangeNotifier {
       photoUrl: 'assets/images/mock_profile_1.jpg',
     );
 
-    _recommendedMap[_testMaleUserId] = _testFemaleUserId;
-    _popularMap[_testMaleUserId] = [_testFemaleUserId, 'u2', 'u4'];
+    for (final profile in mockFemaleProfiles) {
+      _profileTemplates[profile.id] = profile.copyWith();
+    }
+
+    _recommendedMap[_testMaleUserId] = 'female_01';
+    _popularMap[_testMaleUserId] = [
+      'female_01',
+      'female_02',
+      'female_03',
+      'female_04',
+      'female_05',
+      _testFemaleUserId,
+      'u2',
+      'u4',
+    ];
     _recommendedMap[_testFemaleUserId] = _testMaleUserId;
     _popularMap[_testFemaleUserId] = [_testMaleUserId, 'u3'];
 

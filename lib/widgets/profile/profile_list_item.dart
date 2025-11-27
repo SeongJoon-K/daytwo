@@ -6,6 +6,7 @@ import '../../theme/spacing.dart';
 import '../../theme/typography.dart';
 import '../../theme/colors.dart';
 import '../common/daytwo_tag.dart';
+import '../common/daytwo_animations.dart';
 
 class ProfileListItem extends StatelessWidget {
   final UserProfile profile;
@@ -57,16 +58,11 @@ class ProfileListItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: DaytwoSpacing.s12),
-            AnimatedScale(
-              duration: const Duration(milliseconds: 140),
-              scale: isLiked ? 1.1 : 1.0,
-              curve: Curves.easeOutBack,
-              child: IconButton(
-                onPressed: onLike,
-                icon: Icon(
-                  isLiked ? Icons.favorite : Icons.favorite_border,
-                  color: isLiked ? DaytwoColors.primary : DaytwoColors.textSecondary,
-                ),
+            DaytwoAnimations.scalePopOnTap(
+              onTap: onLike,
+              child: Icon(
+                isLiked ? Icons.favorite : Icons.favorite_border,
+                color: isLiked ? DaytwoColors.primary : DaytwoColors.textSecondary,
               ),
             ),
             const SizedBox(width: DaytwoSpacing.s8),

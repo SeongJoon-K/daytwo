@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/common/custom_bottom_nav_bar.dart';
 import 'daytwo_tab.dart';
+import '../widgets/common/daytwo_animations.dart';
 
 /// Root widget that hosts the 4-tab navigation requested.
 class DaytwoShell extends StatefulWidget {
@@ -20,9 +21,11 @@ class _DaytwoShellState extends State<DaytwoShell> {
       body: SafeArea(
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 250),
-          switchInCurve: Curves.easeOut,
-          switchOutCurve: Curves.easeIn,
-          child: _current.screen,
+          transitionBuilder: DaytwoAnimations.tabTransition(offsetY: 10),
+          child: KeyedSubtree(
+            key: ValueKey(_current),
+            child: _current.screen,
+          ),
         ),
       ),
       bottomNavigationBar: CustomBottomNavBar(

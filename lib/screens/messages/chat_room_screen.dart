@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/chat_room.dart';
 import '../../state/app_state.dart';
 import '../../theme/spacing.dart';
+import '../../widgets/common/daytwo_animations.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   final String? roomId;
@@ -71,36 +72,40 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   alignment: isMine
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isMine
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message.text,
-                          style: TextStyle(
-                            color: isMine ? Colors.white : Colors.black87,
+                  child: DaytwoAnimations.fadeInUp(
+                    duration: const Duration(milliseconds: 180),
+                    beginOffsetY: 6,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isMine
+                            ? Theme.of(context).colorScheme.primary
+                            : Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            message.text,
+                            style: TextStyle(
+                              color: isMine ? Colors.white : Colors.black87,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${message.createdAt.hour.toString().padLeft(2, '0')}:${message.createdAt.minute.toString().padLeft(2, '0')}',
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: isMine ? Colors.white70 : Colors.black54,
+                          const SizedBox(height: 4),
+                          Text(
+                            '${message.createdAt.hour.toString().padLeft(2, '0')}:${message.createdAt.minute.toString().padLeft(2, '0')}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: isMine ? Colors.white70 : Colors.black54,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );

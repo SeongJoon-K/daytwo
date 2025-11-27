@@ -11,6 +11,7 @@ import '../../theme/typography.dart';
 import '../../widgets/common/common_padding_box.dart';
 import '../../widgets/common/daytwo_logo.dart';
 import '../../widgets/common/daytwo_tag.dart';
+import '../../widgets/common/daytwo_animations.dart';
 import '../../widgets/profile/profile_main_card.dart';
 import '../../widgets/profile/profile_list_item.dart';
 import '../messages/chat_room_screen.dart';
@@ -97,15 +98,7 @@ class HomeScreen extends StatelessWidget {
         );
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        final curved = CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOutBack,
-          reverseCurve: Curves.easeInBack,
-        );
-        return FadeTransition(
-          opacity: animation,
-          child: ScaleTransition(scale: curved, child: child),
-        );
+        return DaytwoAnimations.springDialog(animation: animation, child: child);
       },
     );
   }
@@ -140,25 +133,18 @@ class HomeScreen extends StatelessWidget {
                 style: DaytwoTypography.textTheme.bodyLarge,
               ),
               const SizedBox(height: DaytwoSpacing.s24),
-              ProfileMainCard(
-                profile: recommended,
-                onTap: () => _openDetail(context, recommended),
-                overlayAction: Material(
-                  color: Colors.white.withValues(alpha: 0.85),
-                  shape: const CircleBorder(),
-                  child: AnimatedScale(
-                    duration: const Duration(milliseconds: 150),
-                    curve: Curves.easeOutBack,
-                    scale: recommended.likedByMe ? 1.12 : 1.0,
-                    child: IconButton(
-                      onPressed: () => _handleLike(context, recommended),
-                      icon: Icon(
-                        recommended.likedByMe
-                            ? Icons.favorite
-                            : Icons.favorite_border,
-                        color: recommended.likedByMe
-                            ? DaytwoColors.primary
-                            : Colors.black87,
+              DaytwoAnimations.fadeInUp(
+                child: ProfileMainCard(
+                  profile: recommended,
+                  onTap: () => _openDetail(context, recommended),
+                  overlayAction: Material(
+                    color: Colors.white.withValues(alpha: 0.85),
+                    shape: const CircleBorder(),
+                    child: DaytwoAnimations.scalePopOnTap(
+                      onTap: () => _handleLike(context, recommended),
+                      child: Icon(
+                        recommended.likedByMe ? Icons.favorite : Icons.favorite_border,
+                        color: recommended.likedByMe ? DaytwoColors.primary : Colors.black87,
                       ),
                     ),
                   ),
@@ -170,14 +156,17 @@ class HomeScreen extends StatelessWidget {
                 style: DaytwoTypography.textTheme.titleMedium,
               ),
               const SizedBox(height: DaytwoSpacing.s16),
-              ...popular.map(
-                (profile) => Padding(
-                  padding: const EdgeInsets.only(bottom: DaytwoSpacing.s12),
-                  child: ProfileListItem(
-                    profile: profile,
-                    isLiked: profile.likedByMe,
-                    onLike: () => _handleLike(context, profile),
-                    onTap: () => _openDetail(context, profile),
+              ...popular.asMap().entries.map(
+                (entry) => DaytwoAnimations.fadeInUp(
+                  delay: Duration(milliseconds: 40 * entry.key),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: DaytwoSpacing.s12),
+                    child: ProfileListItem(
+                      profile: entry.value,
+                      isLiked: entry.value.likedByMe,
+                      onLike: () => _handleLike(context, entry.value),
+                      onTap: () => _openDetail(context, entry.value),
+                    ),
                   ),
                 ),
               ),

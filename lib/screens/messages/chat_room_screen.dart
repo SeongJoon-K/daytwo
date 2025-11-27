@@ -2,12 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/chat_room.dart';
 import '../../state/app_state.dart';
 import '../../theme/spacing.dart';
 
 class ChatRoomScreen extends StatefulWidget {
-  final String roomId;
-  const ChatRoomScreen({super.key, required this.roomId});
+  final String? roomId;
+  final ChatRoom? room;
+
+  const ChatRoomScreen({super.key, this.roomId, this.room})
+    : assert(roomId != null || room != null, 'roomId 또는 room 중 하나는 필수입니다.');
 
   @override
   State<ChatRoomScreen> createState() => _ChatRoomScreenState();
@@ -17,10 +21,21 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
+  String get _roomId => widget.room?.id ?? widget.roomId!;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<AppState>().markRoomAsRead(_roomId);
+    });
+  }
+
   void _send() {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
-    context.read<AppState>().sendMessage(roomId: widget.roomId, text: text);
+    context.read<AppState>().sendMessage(roomId: _roomId, text: text);
     _controller.clear();
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
@@ -36,7 +51,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
-    final room = appState.chatRooms.firstWhere((element) => element.id == widget.roomId);
+    final room =
+        widget.room ??
+        appState.chatRooms.firstWhere((element) => element.id == _roomId);
     final partner = room.partner;
     return Scaffold(
       appBar: AppBar(title: Text(partner.name)),
@@ -51,12 +68,19 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 final message = room.messages[index];
                 final isMine = message.senderId == appState.currentUser.id;
                 return Align(
-                  alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: isMine
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 4),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
-                      color: isMine ? Theme.of(context).colorScheme.primary : Colors.grey.shade200,
+                      color: isMine
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: Column(
@@ -97,10 +121,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     ),
                   ),
                   const SizedBox(width: DaytwoSpacing.s12),
-                  IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: _send,
-                  ),
+                  IconButton(icon: const Icon(Icons.send), onPressed: _send),
                 ],
               ),
             ),

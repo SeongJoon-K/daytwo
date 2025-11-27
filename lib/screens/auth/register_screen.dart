@@ -19,6 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
+  String _gender = 'male';
   bool _isLoading = false;
 
   Future<void> _submit() async {
@@ -36,6 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           password: _passwordController.text,
           name: _nameController.text.trim(),
           age: age,
+          gender: _gender,
         );
     if (!mounted) return;
     setState(() => _isLoading = false);
@@ -79,6 +81,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 validator: (value) => value == null || value.isEmpty ? '이름을 입력해 주세요' : null,
               ),
               const SizedBox(height: DaytwoSpacing.s16),
+              Text('성별', style: Theme.of(context).textTheme.bodyMedium),
+              const SizedBox(height: DaytwoSpacing.s8),
+              Wrap(
+                spacing: DaytwoSpacing.s8,
+                children: [
+                  _GenderChip(
+                    label: '남자',
+                    value: 'male',
+                    groupValue: _gender,
+                    onSelected: (v) => setState(() => _gender = v),
+                  ),
+                  _GenderChip(
+                    label: '여자',
+                    value: 'female',
+                    groupValue: _gender,
+                    onSelected: (v) => setState(() => _gender = v),
+                  ),
+                  _GenderChip(
+                    label: '기타',
+                    value: 'other',
+                    groupValue: _gender,
+                    onSelected: (v) => setState(() => _gender = v),
+                  ),
+                ],
+              ),
+              const SizedBox(height: DaytwoSpacing.s16),
               TextFormField(
                 controller: _ageController,
                 decoration: const InputDecoration(labelText: '나이'),
@@ -94,6 +122,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _GenderChip extends StatelessWidget {
+  final String label;
+  final String value;
+  final String groupValue;
+  final ValueChanged<String> onSelected;
+
+  const _GenderChip({
+    required this.label,
+    required this.value,
+    required this.groupValue,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bool selected = value == groupValue;
+    return ChoiceChip(
+      label: Text(label),
+      selected: selected,
+      onSelected: (_) => onSelected(value),
+      selectedColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+      labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+          ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      side: BorderSide(color: selected ? Theme.of(context).colorScheme.primary : Colors.grey.shade300),
     );
   }
 }

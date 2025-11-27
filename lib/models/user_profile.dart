@@ -5,6 +5,7 @@ class UserProfile {
   final String id;
   String name;
   int age;
+  String gender;
   String job;
   String location;
   String mbti;
@@ -18,6 +19,7 @@ class UserProfile {
     required this.id,
     required this.name,
     required this.age,
+    required this.gender,
     required this.job,
     required this.location,
     required this.mbti,
@@ -30,6 +32,7 @@ class UserProfile {
   UserProfile copyWith({
     String? name,
     int? age,
+    String? gender,
     String? job,
     String? location,
     String? mbti,
@@ -42,6 +45,7 @@ class UserProfile {
       id: id,
       name: name ?? this.name,
       age: age ?? this.age,
+      gender: gender ?? this.gender,
       job: job ?? this.job,
       location: location ?? this.location,
       mbti: mbti ?? this.mbti,
@@ -57,6 +61,7 @@ class UserProfile {
       id: user.id,
       name: user.name,
       age: user.age,
+      gender: user.gender,
       job: user.job ?? '직무 미입력',
       location: user.location ?? '지역 미입력',
       mbti: user.mbti ?? 'MBTI 미입력',

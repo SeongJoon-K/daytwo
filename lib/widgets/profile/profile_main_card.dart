@@ -12,12 +12,14 @@ class ProfileMainCard extends StatelessWidget {
   final UserProfile profile;
   final VoidCallback onTap;
   final Widget? overlayAction;
+  final bool enableHero;
 
   const ProfileMainCard({
     super.key,
     required this.profile,
     required this.onTap,
     this.overlayAction,
+    this.enableHero = true,
   });
 
   @override
@@ -27,6 +29,7 @@ class ProfileMainCard extends StatelessWidget {
     final double cardHeight = size.height * 0.45;
     const borderRadius = BorderRadius.all(Radius.circular(24));
     final String imagePath = profile.photoUrl ?? 'assets/images/mock_profile_1.jpg';
+    final genderLabel = _genderLabel(profile.gender);
 
     return Center(
       child: Material(
@@ -52,7 +55,11 @@ class ProfileMainCard extends StatelessWidget {
               borderRadius: borderRadius,
               child: Stack(
                 children: [
-                  Positioned.fill(child: _buildProfileImage(imagePath)),
+                  Positioned.fill(
+                    child: enableHero
+                        ? Hero(tag: 'profile-hero-${profile.id}', child: _buildProfileImage(imagePath))
+                        : _buildProfileImage(imagePath),
+                  ),
                   Positioned.fill(
                     child: DecoratedBox(
                       decoration: const BoxDecoration(
@@ -91,7 +98,7 @@ class ProfileMainCard extends StatelessWidget {
                         ),
                         const SizedBox(height: DaytwoSpacing.s12),
                         Text(
-                          '${profile.name} · ${profile.age}',
+                          '${profile.name} · ${profile.age} · $genderLabel',
                           style: DaytwoTypography.textTheme.displaySmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
@@ -135,4 +142,15 @@ Widget _buildProfileImage(String imagePath) {
     return Image.network(imagePath, fit: BoxFit.cover);
   }
   return Image.asset(imagePath, fit: BoxFit.cover);
+}
+
+String _genderLabel(String gender) {
+  switch (gender) {
+    case 'male':
+      return '남자';
+    case 'female':
+      return '여자';
+    default:
+      return '기타';
+  }
 }

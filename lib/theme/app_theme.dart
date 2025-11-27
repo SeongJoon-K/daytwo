@@ -11,6 +11,7 @@ ThemeData buildDaytwoTheme() {
     colorScheme: scheme,
     scaffoldBackgroundColor: DaytwoColors.background,
     textTheme: DaytwoTypography.textTheme,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
     appBarTheme: AppBarTheme(
       backgroundColor: DaytwoColors.background,
       foregroundColor: DaytwoColors.textPrimary,
@@ -25,7 +26,8 @@ ThemeData buildDaytwoTheme() {
         borderRadius: BorderRadius.circular(20),
         side: const BorderSide(color: DaytwoColors.border),
       ),
-      elevation: 0,
+      shadowColor: const Color(0x120F172A),
+      elevation: 0.5,
       margin: EdgeInsets.zero,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -43,9 +45,18 @@ ThemeData buildDaytwoTheme() {
         textStyle: DaytwoTypography.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
       ),
     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: DaytwoColors.textPrimary,
+        side: const BorderSide(color: DaytwoColors.border),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        padding: const EdgeInsets.symmetric(horizontal: DaytwoSpacing.s16, vertical: DaytwoSpacing.s12),
+        textStyle: DaytwoTypography.textTheme.bodyMedium,
+      ),
+    ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: DaytwoColors.surface,
+      fillColor: DaytwoColors.surfaceElevated,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
         borderSide: const BorderSide(color: DaytwoColors.border),
@@ -58,6 +69,19 @@ ThemeData buildDaytwoTheme() {
         horizontal: DaytwoSpacing.s16,
         vertical: DaytwoSpacing.s12,
       ),
+    ),
+    chipTheme: ChipThemeData(
+      backgroundColor: DaytwoColors.primarySoft,
+      labelStyle: DaytwoTypography.textTheme.labelMedium,
+      padding: const EdgeInsets.symmetric(horizontal: DaytwoSpacing.s12, vertical: DaytwoSpacing.s4),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: DaytwoColors.surface,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      titleTextStyle: DaytwoTypography.textTheme.titleLarge,
+      contentTextStyle: DaytwoTypography.textTheme.bodyMedium,
     ),
   );
 }

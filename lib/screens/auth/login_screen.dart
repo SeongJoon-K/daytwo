@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../state/app_state.dart';
 import '../../theme/spacing.dart';
 import '../../widgets/common/primary_button.dart';
+import '../../widgets/common/daytwo_logo.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -50,7 +51,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('daytwo', style: Theme.of(context).textTheme.displaySmall),
+                  const Center(child: DaytwoLogo(size: 64, showWordmark: true)),
+                  const SizedBox(height: DaytwoSpacing.s16),
+                  Text(
+                    '취향이 맞는 30·40대 매칭을 시작하세요',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: DaytwoSpacing.s24),
                   TextFormField(
                     controller: _emailController,

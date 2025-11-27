@@ -9,6 +9,9 @@ import '../../theme/typography.dart';
 import '../../widgets/common/secondary_button.dart';
 import '../../widgets/common/primary_button.dart';
 import 'edit_profile_screen.dart';
+import '../legal/terms_of_service_screen.dart';
+import '../legal/privacy_policy_screen.dart';
+import '../support/support_center_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -37,9 +40,9 @@ class ProfileScreen extends StatelessWidget {
               : null,
         ),
         const SizedBox(height: DaytwoSpacing.s16),
-        Text('${user.name} · ${user.age}', style: DaytwoTypography.textTheme.displaySmall),
+        Text('${user.name} · ${user.age} · ${_genderLabel(user.gender)}', style: DaytwoTypography.textTheme.displaySmall),
         const SizedBox(height: DaytwoSpacing.s8),
-        Text('${user.job} / ${user.location}', style: DaytwoTypography.textTheme.bodyMedium),
+        Text('${user.job} / ${user.location} · ${_genderLabel(user.gender)}', style: DaytwoTypography.textTheme.bodyMedium),
         const SizedBox(height: DaytwoSpacing.s8),
         Text(user.intro, style: DaytwoTypography.textTheme.bodyLarge),
         const SizedBox(height: DaytwoSpacing.s12),
@@ -70,6 +73,32 @@ class ProfileScreen extends StatelessWidget {
           trailing: const Icon(Icons.chevron_right),
           onTap: () {},
         ),
+        const SizedBox(height: DaytwoSpacing.s16),
+        ListTile(
+          leading: const Icon(Icons.description_outlined),
+          title: const Text('이용약관'),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const TermsOfServiceScreen()),
+          ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.privacy_tip_outlined),
+          title: const Text('개인정보 처리방침'),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const PrivacyPolicyScreen()),
+          ),
+        ),
+        ListTile(
+          leading: const Icon(Icons.support_agent_outlined),
+          title: const Text('고객센터 / 문의'),
+          subtitle: const Text('help@daytwo.app'),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const SupportCenterScreen()),
+          ),
+        ),
         const Divider(),
         SwitchListTile(
           title: const Text('알림 설정'),
@@ -86,6 +115,17 @@ class ProfileScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+String _genderLabel(String gender) {
+  switch (gender) {
+    case 'male':
+      return '남자';
+    case 'female':
+      return '여자';
+    default:
+      return '기타';
   }
 }
 

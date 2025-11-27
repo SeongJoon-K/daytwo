@@ -5,6 +5,7 @@ class AuthUser {
   final String password; // 간단한 해시 적용된 문자열
   final String name;
   final int age;
+  final String gender;
   final String? job;
   final String? location;
   final String? mbti;
@@ -17,6 +18,7 @@ class AuthUser {
     required this.password,
     required this.name,
     required this.age,
+    required this.gender,
     this.job,
     this.location,
     this.mbti,
@@ -27,6 +29,7 @@ class AuthUser {
   AuthUser copyWith({
     String? name,
     int? age,
+    String? gender,
     String? job,
     String? location,
     String? mbti,
@@ -39,6 +42,7 @@ class AuthUser {
       password: password,
       name: name ?? this.name,
       age: age ?? this.age,
+      gender: gender ?? this.gender,
       job: job ?? this.job,
       location: location ?? this.location,
       mbti: mbti ?? this.mbti,

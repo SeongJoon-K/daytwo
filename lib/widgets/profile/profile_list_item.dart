@@ -5,6 +5,7 @@ import '../../models/user_profile.dart';
 import '../../theme/spacing.dart';
 import '../../theme/typography.dart';
 import '../../theme/colors.dart';
+import '../common/daytwo_tag.dart';
 
 class ProfileListItem extends StatelessWidget {
   final UserProfile profile;
@@ -43,18 +44,29 @@ class ProfileListItem extends StatelessWidget {
                 children: [
                   Text('${profile.name} · ${profile.age}', style: DaytwoTypography.textTheme.titleMedium),
                   const SizedBox(height: DaytwoSpacing.s4),
-                  Text('${profile.location} · ${profile.job}', style: DaytwoTypography.textTheme.bodyMedium),
+                  Text('${_genderLabel(profile.gender)} · ${profile.location} · ${profile.job}', style: DaytwoTypography.textTheme.bodyMedium),
                   const SizedBox(height: DaytwoSpacing.s4),
-                  Text('MBTI: ${profile.mbti}', style: DaytwoTypography.textTheme.labelMedium),
+                  Wrap(
+                    spacing: DaytwoSpacing.s8,
+                    runSpacing: DaytwoSpacing.s4,
+                    children: [
+                      DaytwoTag(label: 'MBTI ${profile.mbti}', icon: Icons.bolt_outlined),
+                    ],
+                  ),
                 ],
               ),
             ),
             const SizedBox(width: DaytwoSpacing.s12),
-            IconButton(
-              onPressed: onLike,
-              icon: Icon(
-                isLiked ? Icons.favorite : Icons.favorite_border,
-                color: isLiked ? DaytwoColors.primary : DaytwoColors.textSecondary,
+            AnimatedScale(
+              duration: const Duration(milliseconds: 140),
+              scale: isLiked ? 1.1 : 1.0,
+              curve: Curves.easeOutBack,
+              child: IconButton(
+                onPressed: onLike,
+                icon: Icon(
+                  isLiked ? Icons.favorite : Icons.favorite_border,
+                  color: isLiked ? DaytwoColors.primary : DaytwoColors.textSecondary,
+                ),
               ),
             ),
             const SizedBox(width: DaytwoSpacing.s8),
@@ -86,4 +98,15 @@ Widget _buildListItemImage(String imagePath) {
     return Image.network(imagePath, fit: BoxFit.cover);
   }
   return Image.asset(imagePath, fit: BoxFit.cover);
+}
+
+String _genderLabel(String gender) {
+  switch (gender) {
+    case 'male':
+      return '남자';
+    case 'female':
+      return '여자';
+    default:
+      return '기타';
+  }
 }
